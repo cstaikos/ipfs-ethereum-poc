@@ -31,6 +31,12 @@ web3.eth.getBlock('latest').then(function(result){
         }
         console.log("Contract address saved!");
       })
+      fs.writeFile("./simpleStorageABI.js", "var simpleStorageABI = " + JSON.stringify(abiDefinition), function(err){
+        if(err) {
+          return console.log(err)
+        }
+        console.log("Contract ABI saved!");
+      })
     }
   );
 })

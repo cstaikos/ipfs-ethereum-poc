@@ -6,6 +6,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.js"></script>
   <script src="./web3.js"></script>
   <script src="./contractAddress.js"></script>
+  <script src="./simpleStorageABI.js"></script>
 </head>
 
 <body>
@@ -30,12 +31,13 @@
       <div id="storage-tool">
         <div>
           <ol>
-            <li v-for="item in storageItems">{{ item.data }}</li>
+            <li v-for="item in storageItems">{{ item }}</li>
           </ol>
         </div>
         <div>
           <textarea v-model="itemData" placeholder="Enter data to send here"></textarea>
           <button v-on:click="addItem">Add Item!</button>
+          <button v-on:click="getItems">Refresh Items!</button>
         </div>
       </div>
   </div>
@@ -55,25 +57,58 @@
       toAddress: null,
       value: 0,
       storageItems: [],
-      itemData: null
+      itemData: null,
+      contract: null
     },
     methods: {
       sendTransaction: function() {
         web3.eth.sendTransaction({from: this.fromAddress, to: this.toAddress, value: web3.toWei(this.value)})
       },
       addItem: function() {
-        console.log("woohoo!");
+        var that = this;
+        this.contract.methods.addItem(this.itemData).send({from: this.accounts[0]}, function(error, result) {
+          that.getItems();
+        });
       },
       getItems: function() {
-
+        this.storageItems = [];
+        var numItems = 0;
+        var that = this;
+        this.contract.methods.getItemsLength().call(this.accounts[0])
+        .then(function(result) {
+          numItems = result;
+          return;
+        })
+        .then(function() {
+          for(var i=0; i<numItems; i++) {
+            console.log(i);
+            that.contract.methods.getItemByIndex(i).call(that.accounts[0])
+            .then(function(result) {
+              that.storageItems.push(result);
+            })
+          }
+        });
       },
       initData: function() {
         var that = this;
         web3.eth.getAccounts().then(function(result) {that.accounts = result;});
+      },
+      initContract: function() {
+        // var that = this;
+        this.contract = new web3.eth.Contract(
+          simpleStorageABI,
+          contractAddress,
+          {
+            from: this.accounts[0],
+            gasPrice: '20000000000',
+            gas: '100000'
+          }
+        )
       }
     },
     created: function() {
       this.initData();
+      this.initContract();
     }
   });
 
