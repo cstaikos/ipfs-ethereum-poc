@@ -25,7 +25,7 @@ web3.eth.getBlock('latest').then(function(result){
     .then(function(result) {
       deployedContract = result;
       contractAddress = deployedContract.options.address;
-      fs.writeFile("./contractAddress.txt", contractAddress, function(err){
+      fs.writeFile("./contractAddress.js", "var contractAddress = \"" + contractAddress + "\".toString();", function(err){
         if(err) {
           return console.log(err)
         }

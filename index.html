@@ -5,11 +5,12 @@
   <title>Academia POC</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.js"></script>
   <script src="./web3.js"></script>
+  <script src="./contractAddress.js"></script>
 </head>
 
 <body>
   <div id="app">
-      <div>
+      <div id="send-tool">
         <label for="from">From Address</label>
         <select v-model="fromAddress" id="from">
           <option value=""></option>
@@ -25,6 +26,18 @@
           Send!
         </button>
       </div>
+
+      <div id="storage-tool">
+        <div>
+          <ol>
+            <li v-for="item in storageItems">{{ item.data }}</li>
+          </ol>
+        </div>
+        <div>
+          <textarea v-model="itemData" placeholder="Enter data to send here"></textarea>
+          <button v-on:click="addItem">Add Item!</button>
+        </div>
+      </div>
   </div>
 
 
@@ -37,18 +50,33 @@
   var app = new Vue({
     el: "#app",
     data: {
-      message: "CLICK ME",
-      accounts: web3.eth.accounts,
+      accounts: [],
       fromAddress: null,
       toAddress: null,
-      value: 0
+      value: 0,
+      storageItems: [],
+      itemData: null
     },
     methods: {
       sendTransaction: function() {
         web3.eth.sendTransaction({from: this.fromAddress, to: this.toAddress, value: web3.toWei(this.value)})
+      },
+      addItem: function() {
+        console.log("woohoo!");
+      },
+      getItems: function() {
+
+      },
+      initData: function() {
+        var that = this;
+        web3.eth.getAccounts().then(function(result) {that.accounts = result;});
       }
+    },
+    created: function() {
+      this.initData();
     }
   });
+
 </script>
 
 </html>
