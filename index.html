@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Academia POC</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.js"></script>
+  <script src="./web3.js"></script>
+</head>
+
+<body>
+  <div id="app">
+      <div>
+        <label for="from">From Address</label>
+        <select v-model="fromAddress" id="from">
+          <option value=""></option>
+          <option v-for="account in accounts">{{ account }}</option>
+        </select>
+        <label for="to">To Address</label>
+        <select id="to">
+          <option value=""></option>
+          <option v-for="account in accounts">{{ account }}</option>
+        </select>
+        <input v-model="value" placeholder="ETH Amount"></input>
+        <button v-on:click="sendTransaction">
+          Send!
+        </button>
+      </div>
+  </div>
+
+
+</body>
+
+<script>
+  var web3 = new Web3();
+  web3.setProvider(new web3.providers.HttpProvider('http://127.0.0.1:8545'));
+
+  var app = new Vue({
+    el: "#app",
+    data: {
+      message: "CLICK ME",
+      accounts: web3.eth.accounts,
+      fromAddress: null,
+      toAddress: null,
+      value: 0
+    },
+    methods: {
+      sendTransaction: function() {
+        web3.eth.sendTransaction({from: this.fromAddress, to: this.toAddress, value: web3.toWei(this.value)})
+      }
+    }
+  });
+</script>
+
+</html>
