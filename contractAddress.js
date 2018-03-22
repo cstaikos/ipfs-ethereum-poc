@@ -1,1 +1,0 @@
-var contractAddress = "0x822cCdb2144D55B945f63F7d4077966FefAA9A2d".toString();
