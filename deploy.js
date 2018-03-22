@@ -9,7 +9,7 @@ code = fs.readFileSync('SimpleStorage.sol').toString();
 compiledCode = solc.compile(code);
 abiDefinition = JSON.parse(compiledCode.contracts[':SimpleStorage'].interface);
 byteCode = compiledCode.contracts[':SimpleStorage'].bytecode;
-account = "0xd6e174c554F7CE29700046e0971f8c960Ee28338";
+account = "";
 gasLimit = 0;
 deployedContract = null;
 
@@ -17,8 +17,13 @@ web3.eth.getBlock('latest').then(function(result){
   gasLimit = result.gasLimit;
 })
 .then(function() {
-  simpleStorageContract = new web3.eth.Contract(abiDefinition, {data: byteCode, from: account, gas: gasLimit});
-  simpleStorageContract.deploy({data: byteCode, arguments: null})
+  web3.eth.getAccounts()
+  .then(function(result) {
+    account = result[0];
+  })
+  .then(function() {
+    simpleStorageContract = new web3.eth.Contract(abiDefinition, {data: byteCode, from: account, gas: gasLimit});
+    simpleStorageContract.deploy({data: byteCode, arguments: null})
     .send(function(error, txHash) {
       console.log("Transaction Hash" + txHash);
     })
@@ -39,4 +44,5 @@ web3.eth.getBlock('latest').then(function(result){
       })
     }
   );
+})
 })
