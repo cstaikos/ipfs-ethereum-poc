@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <title>Academia POC</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.js"></script>
-  <script src="./web3.js"></script>
-  <script src="./contractAddress.js"></script>
-  <script src="./simpleStorageABI.js"></script>
 </head>
 
 <body>
@@ -45,72 +42,6 @@
 
 </body>
 
-<script>
-  var web3 = new Web3();
-  web3.setProvider(new web3.providers.HttpProvider('http://127.0.0.1:8545'));
-
-  var app = new Vue({
-    el: "#app",
-    data: {
-      accounts: [],
-      fromAddress: null,
-      toAddress: null,
-      value: 0,
-      storageItems: [],
-      itemData: null,
-      contract: null
-    },
-    methods: {
-      sendTransaction: function() {
-        web3.eth.sendTransaction({from: this.fromAddress, to: this.toAddress, value: web3.toWei(this.value)})
-      },
-      addItem: function() {
-        var that = this;
-        this.contract.methods.addItem(this.itemData).send({from: this.accounts[0]}, function(error, result) {
-          that.getItems();
-        });
-      },
-      getItems: function() {
-        this.storageItems = [];
-        var numItems = 0;
-        var that = this;
-        this.contract.methods.getItemsLength().call(this.accounts[0])
-        .then(function(result) {
-          numItems = result;
-          return;
-        })
-        .then(function() {
-          for(var i=0; i<numItems; i++) {
-            that.contract.methods.getItemByIndex(i).call(that.accounts[0])
-            .then(function(result) {
-              that.storageItems.push(result);
-            })
-          }
-        });
-      },
-      initData: function() {
-        var that = this;
-        web3.eth.getAccounts().then(function(result) {that.accounts = result;});
-      },
-      initContract: function() {
-        this.contract = new web3.eth.Contract(
-          simpleStorageABI,
-          contractAddress,
-          {
-            from: this.accounts[0],
-            gasPrice: '20000000000',
-            gas: '100000'
-          }
-        )
-      }
-    },
-    created: function() {
-      this.initContract();
-      this.initData();
-      this.getItems();
-    }
-  });
-
-</script>
+<script src="./bundle.js"></script>
 
 </html>

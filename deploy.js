@@ -30,13 +30,13 @@ web3.eth.getBlock('latest').then(function(result){
     .then(function(result) {
       deployedContract = result;
       contractAddress = deployedContract.options.address;
-      fs.writeFile("./contractAddress.js", "var contractAddress = \"" + contractAddress + "\".toString();", function(err){
+      fs.writeFile("./contractAddress.js", "module.exports = {address: \"" + contractAddress + "\"}", function(err){
         if(err) {
           return console.log(err)
         }
         console.log("Contract address saved!");
       })
-      fs.writeFile("./simpleStorageABI.js", "var simpleStorageABI = " + JSON.stringify(abiDefinition), function(err){
+      fs.writeFile("./simpleStorageABI.js", "module.exports = {abi: " + JSON.stringify(abiDefinition) + "}", function(err){
         if(err) {
           return console.log(err)
         }
