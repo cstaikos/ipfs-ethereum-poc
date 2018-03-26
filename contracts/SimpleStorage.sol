@@ -3,10 +3,13 @@ pragma solidity ^0.4.0;
 contract SimpleStorage {
     string[] public items;
 
+    event ItemAdded(string contents);
+
     function SimpleStorage() public {}
 
     function addItem(string contents) public returns(bool) {
         items.push(contents);
+        emit ItemAdded(contents);
         return true;
     }
 

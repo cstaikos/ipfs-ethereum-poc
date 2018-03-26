@@ -1,9 +1,13 @@
 var Web3 = require('web3');
+var ipfsAPI = require('ipfs-api');
 var contractAddress = require('./contractAddress.js').address;
 var simpleStorageABI = require('./simpleStorageABI.js').abi;
 
 var web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider('http://127.0.0.1:8545'));
+web3.setProvider(new web3.providers.WebsocketProvider('ws://127.0.0.1:8545'));
+
+var ipfs = ipfsAPI();
+console.log(ipfs);
 
 var app = new Vue({
   el: "#app",
@@ -58,11 +62,21 @@ var app = new Vue({
           gas: '100000'
         }
       )
+    },
+    setupEventListeners: function() {
+      this.contract.events.ItemAdded({}, function(error, result) {
+        if (error) {
+          console.log(error);
+          return;
+        }
+        alert(result);
+      })
     }
   },
   created: function() {
     this.initContract();
     this.initData();
     this.getItems();
+    this.setupEventListeners();
   }
 });
