@@ -1,13 +1,12 @@
 var Web3 = require('web3');
 var ipfsAPI = require('ipfs-api');
+var simpleStorageABI = require('./build/contracts/SimpleStorage.json').abi;
 var contractAddress = require('./contractAddress.js').address;
-var simpleStorageABI = require('./simpleStorageABI.js').abi;
 
 var web3 = new Web3();
-web3.setProvider(new web3.providers.WebsocketProvider('ws://127.0.0.1:8545'));
+web3.setProvider(new web3.providers.HttpProvider('http://127.0.0.1:8545'));
 
 var ipfs = ipfsAPI();
-console.log(ipfs);
 
 var app = new Vue({
   el: "#app",
@@ -48,11 +47,10 @@ var app = new Vue({
         }
       });
     },
-    initData: function() {
+    init: function() {
       var that = this;
       web3.eth.getAccounts().then(function(result) {that.accounts = result;});
-    },
-    initContract: function() {
+
       this.contract = new web3.eth.Contract(
         simpleStorageABI,
         contractAddress,
@@ -74,8 +72,7 @@ var app = new Vue({
     }
   },
   created: function() {
-    this.initContract();
-    this.initData();
+    this.init();
     this.getItems();
     this.setupEventListeners();
   }
