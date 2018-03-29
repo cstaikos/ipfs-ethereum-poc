@@ -4,7 +4,7 @@ var simpleStorageABI = require('./build/contracts/SimpleStorage.json').abi;
 var contractAddress = require('./contractAddress.js').address;
 
 var web3 = new Web3();
-web3.setProvider(new web3.providers.HttpProvider('http://127.0.0.1:8545'));
+web3.setProvider(new web3.providers.WebsocketProvider('ws://127.0.0.1:8545'));
 
 var ipfs = ipfsAPI();
 
@@ -33,14 +33,14 @@ var app = new Vue({
       this.storageItems = [];
       var numItems = 0;
       var that = this;
-      this.contract.methods.getItemsLength().call(this.accounts[0])
+      this.contract.methods.getItemsLength().call({from: this.accounts[0]})
       .then(function(result) {
         numItems = result;
         return;
       })
       .then(function() {
         for(var i=0; i<numItems; i++) {
-          that.contract.methods.getItemByIndex(i).call(that.accounts[0])
+          that.contract.methods.getItemByIndex(i).call({from: that.accounts[0]})
           .then(function(result) {
             that.storageItems.push(result);
           })
