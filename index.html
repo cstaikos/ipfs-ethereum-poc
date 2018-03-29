@@ -36,6 +36,11 @@
           <button v-on:click="addItem">Add Item!</button>
           <button v-on:click="getItems">Refresh Items!</button>
         </div>
+        <div>
+          <ol>
+            <li v-for="item in itemsAdded">{{ item }}</li>
+          </ol>
+        </div>
       </div>
   </div>
 

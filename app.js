@@ -16,6 +16,7 @@ var app = new Vue({
     toAddress: null,
     value: 0,
     storageItems: [],
+    itemsAdded: [],
     itemData: null,
     contract: null
   },
@@ -62,12 +63,13 @@ var app = new Vue({
       )
     },
     setupEventListeners: function() {
+      var that = this;
       this.contract.events.ItemAdded({}, function(error, result) {
         if (error) {
           console.log(error);
           return;
         }
-        alert(result);
+        that.itemsAdded.push(result.returnValues.contents);
       })
     }
   },
