@@ -1,19 +1,17 @@
 pragma solidity ^0.4.0;
 
 contract SimpleStorage {
-    string[] public items;
+    bytes32[] public items;
 
-    event ItemAdded(string contents);
+    event ItemAdded(bytes32 contents);
 
-    function SimpleStorage() public {}
-
-    function addItem(string contents) public returns(bool) {
+    function addItem(bytes32 contents) public returns(bool) {
         items.push(contents);
         emit ItemAdded(contents);
         return true;
     }
 
-    function getItemByIndex(uint256 index) public constant returns(string) {
+    function getItemByIndex(uint256 index) public constant returns(bytes32) {
         require(index < items.length);
         return items[index];
     }

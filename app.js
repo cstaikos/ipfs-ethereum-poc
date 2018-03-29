@@ -26,7 +26,7 @@ var app = new Vue({
     },
     addItem: function() {
       var that = this;
-      this.contract.methods.addItem(this.itemData).send({from: this.accounts[0]}, function(error, result) {
+      this.contract.methods.addItem(web3.utils.fromAscii(this.itemData)).send({from: this.accounts[0]}, function(error, result) {
         that.getItems();
       });
     },
@@ -43,7 +43,7 @@ var app = new Vue({
         for(var i=0; i<numItems; i++) {
           that.contract.methods.getItemByIndex(i).call({from: that.accounts[0]})
           .then(function(result) {
-            that.storageItems.push(result);
+            that.storageItems.push(web3.utils.toAscii(result));
           })
         }
       });
@@ -69,7 +69,7 @@ var app = new Vue({
           console.log(error);
           return;
         }
-        that.itemsAdded.push(result.returnValues.contents);
+        that.itemsAdded.push(web3.utils.toAscii(result.returnValues.contents));
       })
     }
   },
