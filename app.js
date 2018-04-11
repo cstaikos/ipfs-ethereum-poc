@@ -22,7 +22,7 @@ var app = new Vue({
   },
   methods: {
     sendTransaction: function() {
-      web3.eth.sendTransaction({from: this.fromAddress, to: this.toAddress, value: web3.toWei(this.value)})
+      web3.eth.sendTransaction({from: this.fromAddress, to: this.toAddress, value: web3.toWei(this.value)});
     },
     addItem: function() {
       var that = this;
@@ -44,7 +44,7 @@ var app = new Vue({
           that.contract.methods.getItemByIndex(i).call({from: that.accounts[0]})
           .then(function(result) {
             that.storageItems.push(web3.utils.toAscii(result));
-          })
+          });
         }
       });
     },
@@ -60,7 +60,7 @@ var app = new Vue({
           gasPrice: '20000000000',
           gas: '100000'
         }
-      )
+      );
     },
     setupEventListeners: function() {
       var that = this;
@@ -70,7 +70,7 @@ var app = new Vue({
           return;
         }
         that.itemsAdded.push(web3.utils.toAscii(result.returnValues.contents));
-      })
+      });
     }
   },
   created: function() {
