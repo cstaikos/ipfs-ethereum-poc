@@ -1,0 +1,8 @@
+.tool {
+  display: block;
+  width: 90%;
+  float: left;
+  border: 1px solid black;
+  margin: 15px;
+  padding: 10px;
+}

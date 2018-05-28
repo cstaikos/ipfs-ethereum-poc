@@ -71,6 +71,9 @@ var app = new Vue({
         }
         that.itemsAdded.push(web3.utils.toAscii(result.returnValues.contents));
       });
+    },
+    uploadFile: function() {
+
     }
   },
   created: function() {
