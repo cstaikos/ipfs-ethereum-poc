@@ -7,9 +7,9 @@ contract('SimpleStorage', function (accounts) {
     var instance;
     return SimpleStorage.deployed().then(function (newInstance) {
       instance = newInstance;
-      return instance.addItem(web3.fromAscii('test'), {from: accounts[0]});
+      return instance.addStorageItem(web3.fromAscii('test'), {from: accounts[0]});
     }).then(function () {
-      return instance.getItems.call();
+      return instance.getStorageItems.call();
     }).then(function (result) {
       items = result;
       assert.equal(items.length, 1, 'Storage size increased to 1');

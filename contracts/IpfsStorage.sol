@@ -11,14 +11,14 @@ contract IpfsStorage {
 
     event ItemAdded(bytes32 contentHash);
 
-    function addItem(bytes32 contentHash, uint8 hashFunction, uint8 size) public returns(bool) {
+    function addIpfsItem(bytes32 contentHash, uint8 hashFunction, uint8 size) public returns(bool) {
       itemMetadataMapping[contentHash] = Multihash({hashFunction: hashFunction, size: size});
       itemHashes.push(contentHash);
       emit ItemAdded(contentHash);
       return true;
     }
 
-    function getItems() public constant returns(bytes32[]) {
+    function getIpfsItems() public constant returns(bytes32[]) {
         return itemHashes;
     }
 

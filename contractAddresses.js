@@ -1,0 +1,1 @@
+module.exports = {storage: "0xcd8e632442487850e519d97b31d0eb778aadb0ef", ipfs: "0xb850c5b0735a6373ecaff42d947701df53258f12"}

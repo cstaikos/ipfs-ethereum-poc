@@ -5,13 +5,13 @@ contract SimpleStorage {
 
     event ItemAdded(bytes32 contents);
 
-    function addItem(bytes32 contents) public returns(bool) {
+    function addStorageItem(bytes32 contents) public returns(bool) {
         items.push(contents);
         emit ItemAdded(contents);
         return true;
     }
 
-    function getItems() public constant returns(bytes32[]) {
+    function getStorageItems() public constant returns(bytes32[]) {
       return items;
     }
 }

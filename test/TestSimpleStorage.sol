@@ -7,9 +7,9 @@ import "../contracts/SimpleStorage.sol";
 contract TestSimpleStorage {
   function testAddOneItem() public {
     SimpleStorage simpleStorage = new SimpleStorage();
-    simpleStorage.addItem("0x123");
+    simpleStorage.addStorageItem("0x123");
 
-    bytes32[] memory result = simpleStorage.getItems();
+    bytes32[] memory result = simpleStorage.getStorageItems();
 
     Assert.equal(uint(result.length), 1, "Should be one item");
     Assert.equal(result[0], "0x123", "Item in storage should be the one we added");

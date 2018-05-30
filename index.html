@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <title>Storage POC</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.js"></script>
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
   <div id="app">
-      <div id="send-tool">
+      <div id="send-tool" class="tool">
         <label for="from">From Address</label>
         <select v-model="fromAddress" id="from">
           <option value=""></option>
@@ -25,26 +26,28 @@
         </button>
       </div>
 
-      <div id="storage-tool">
+      <div id="storage-tool"class="tool">
         <div>
+          Items in Blockchain:
           <ol>
             <li v-for="item in storageItems">{{ item }}</li>
           </ol>
         </div>
         <div>
           <textarea v-model="itemData" placeholder="Enter data to send here"></textarea>
-          <button v-on:click="addItem">Add Item!</button>
-          <button v-on:click="getItems">Refresh Items!</button>
+          <button v-on:click="addStorageItem">Add Item!</button>
+          <button v-on:click="getStorageItems">Refresh Items!</button>
         </div>
         <div>
+          Items added this session:
           <ol>
-            <li v-for="item in itemsAdded">{{ item }}</li>
+            <li v-for="item in storageItemsAdded">{{ item }}</li>
           </ol>
         </div>
       </div>
 
 
-      <div id="ipfs-tool">
+      <div id="ipfs-tool" class="tool">
         <div>
           <form>
             <input type="file" v-on:change="grabFile">

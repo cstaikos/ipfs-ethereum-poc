@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "ipfs-api": "^18.2.1",
+    "lodash": "^4.17.10",
+    "npm": "^6.1.0",
     "solc": "^0.4.21",
     "web3": "^1.0.0-beta.33"
   }

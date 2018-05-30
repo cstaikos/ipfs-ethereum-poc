@@ -1,8 +1,9 @@
 var Web3 = require('web3');
 var ipfsAPI = require('ipfs-api');
 var fs = require('fs');
+var _ = require('lodash');
 var simpleStorageABI = require('./build/contracts/SimpleStorage.json').abi;
-var contractAddress = require('./contractAddress.js').address;
+var contractAddresses = require('./contractAddresses.js');
 var Buffer = require('buffer').Buffer;
 
 var web3 = new Web3();
@@ -18,46 +19,40 @@ var app = new Vue({
     toAddress: null,
     value: 0,
     storageItems: [],
-    itemsAdded: [],
+    storageItemsAdded: [],
+    ipfsItems: [],
+    ipfsItemsAdded: [],
     itemData: null,
-    contract: null,
+    storageContract: null,
     fileToUpload: null
   },
   methods: {
     sendTransaction: function() {
       web3.eth.sendTransaction({from: this.fromAddress, to: this.toAddress, value: web3.toWei(this.value)});
     },
-    addItem: function() {
+    addStorageItem: function() {
       var that = this;
-      this.contract.methods.addItem(web3.utils.fromAscii(this.itemData)).send({from: this.accounts[0]}, function(error, result) {
-        that.getItems();
+      this.storageContract.methods.addStorageItem(web3.utils.fromAscii(this.itemData)).send({from: this.accounts[0]}, function(error, result) {
+        that.getStorageItems();
       });
     },
-    getItems: function() {
+    getStorageItems: function() {
       this.storageItems = [];
       var numItems = 0;
       var that = this;
-      this.contract.methods.getItemsLength().call({from: this.accounts[0]})
+      this.storageContract.methods.getStorageItems().call({from: this.accounts[0]})
       .then(function(result) {
-        numItems = result;
-        return;
-      })
-      .then(function() {
-        for(var i=0; i<numItems; i++) {
-          that.contract.methods.getItemByIndex(i).call({from: that.accounts[0]})
-          .then(function(result) {
-            that.storageItems.push(web3.utils.toAscii(result));
-          });
-        }
+        that.storageItems = _.map(result, function(item) {
+          return web3.utils.toAscii(item);
+        });
       });
     },
     init: function() {
       var that = this;
       web3.eth.getAccounts().then(function(result) {that.accounts = result;});
-
-      this.contract = new web3.eth.Contract(
+      this.storageContract = new web3.eth.Contract(
         simpleStorageABI,
-        contractAddress,
+        contractAddresses.storage,
         {
           from: this.accounts[0],
           gasPrice: '20000000000',
@@ -67,12 +62,12 @@ var app = new Vue({
     },
     setupEventListeners: function() {
       var that = this;
-      this.contract.events.ItemAdded({}, function(error, result) {
+      this.storageContract.events.ItemAdded({}, function(error, result) {
         if (error) {
           console.log(error);
           return;
         }
-        that.itemsAdded.push(web3.utils.toAscii(result.returnValues.contents));
+        that.storageItemsAdded.push(web3.utils.toAscii(result.returnValues.contents));
       });
     },
     grabFile: function(e) {
@@ -92,11 +87,11 @@ var app = new Vue({
           });
         };
         reader.readAsArrayBuffer(this.fileToUpload);
-  },
-  created: function() {
-    this.init();
-    this.getItems();
-    this.setupEventListeners();
   }
+},
+created: function() {
+  this.init();
+  this.getStorageItems();
+  this.setupEventListeners();
 }
 });
