@@ -1,12 +1,13 @@
 var Web3 = require('web3');
 var ipfsAPI = require('ipfs-api');
+var fs = require('fs');
 var simpleStorageABI = require('./build/contracts/SimpleStorage.json').abi;
 var contractAddress = require('./contractAddress.js').address;
 
 var web3 = new Web3();
 web3.setProvider(new web3.providers.WebsocketProvider('ws://127.0.0.1:8545'));
 
-var ipfs = ipfsAPI();
+var ipfs = ipfsAPI('ipfs.infura.io', '5001', {protocol: 'https'});
 
 var app = new Vue({
   el: "#app",
@@ -18,7 +19,8 @@ var app = new Vue({
     storageItems: [],
     itemsAdded: [],
     itemData: null,
-    contract: null
+    contract: null,
+    fileToUpload: null
   },
   methods: {
     sendTransaction: function() {
@@ -72,13 +74,31 @@ var app = new Vue({
         that.itemsAdded.push(web3.utils.toAscii(result.returnValues.contents));
       });
     },
+    grabFile: function(e) {
+      this.fileToUpload = e.target.files[0];
+    },
     uploadFile: function() {
+        console.log(this.fileToUpload);
+        var reader = new FileReader();
 
-    }
+        reader.onload = function(e) {
+          console.log(e.target.result);
+          ipfs.files.add([{path: './file.txt', content: e.target.result}], function(err, res){
+              console.log(err, res);
+          });
+        };
+        reader.readAsArrayBuffer(this.fileToUpload);
+
+
+        // var files = [{path: './file.txt', content: e.target.result}];
+
+
+
   },
   created: function() {
     this.init();
     this.getItems();
     this.setupEventListeners();
   }
+}
 });

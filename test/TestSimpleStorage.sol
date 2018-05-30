@@ -1,4 +1,4 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.4.24;
 
 import "truffle/Assert.sol";
 import "truffle/DeployedAddresses.sol";
@@ -9,9 +9,9 @@ contract TestSimpleStorage {
     SimpleStorage simpleStorage = new SimpleStorage();
     simpleStorage.addItem("0x123");
 
-    bytes32 result = simpleStorage.getItemByIndex(0);
+    bytes32[] memory result = simpleStorage.getItems();
 
-    Assert.equal(uint(simpleStorage.getItemsLength()), uint(1), "Should be one item in storage");
-    Assert.equal(result, "0x123", "Item we added should be at index 0");
+    Assert.equal(uint(result.length), 1, "Should be one item");
+    Assert.equal(result[0], "0x123", "Item in storage should be the one we added");
   }
 }

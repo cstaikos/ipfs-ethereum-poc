@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Academia POC</title>
+  <title>Storage POC</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.15/dist/vue.js"></script>
 </head>
 
@@ -40,6 +40,17 @@
           <ol>
             <li v-for="item in itemsAdded">{{ item }}</li>
           </ol>
+        </div>
+      </div>
+
+
+      <div id="ipfs-tool">
+        <div>
+          <form>
+            <input type="file" v-on:change="grabFile">
+            <input type="button" v-on:click="uploadFile" value="Upload">
+          </form>
+          <!-- <button v-on:click="uploadFile">Upload File</button> -->
         </div>
       </div>
   </div>
