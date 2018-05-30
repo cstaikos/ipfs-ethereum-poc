@@ -79,22 +79,19 @@ var app = new Vue({
       this.fileToUpload = e.target.files[0];
     },
     uploadFile: function() {
-        console.log(this.fileToUpload);
         var reader = new FileReader();
 
         reader.onload = function(e) {
-          console.log(e.target.result);
-          ipfs.files.add([{path: '~/Desktop/a.txt', content: new Buffer(e.target.result)}], function(err, res){
-              console.log(err, res);
+          ipfs.files.add(new Buffer(e.target.result), function(err, res){
+              if(err) {
+                console.log("Error saving to IPFS", err);
+              }
+              else {
+                console.log("File saved to IPFS", res);
+              }
           });
         };
         reader.readAsArrayBuffer(this.fileToUpload);
-
-
-        // var files = [{path: './file.txt', content: e.target.result}];
-
-
-
   },
   created: function() {
     this.init();
