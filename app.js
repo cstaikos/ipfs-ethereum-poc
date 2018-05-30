@@ -3,6 +3,7 @@ var ipfsAPI = require('ipfs-api');
 var fs = require('fs');
 var simpleStorageABI = require('./build/contracts/SimpleStorage.json').abi;
 var contractAddress = require('./contractAddress.js').address;
+var Buffer = require('buffer').Buffer;
 
 var web3 = new Web3();
 web3.setProvider(new web3.providers.WebsocketProvider('ws://127.0.0.1:8545'));
@@ -83,7 +84,7 @@ var app = new Vue({
 
         reader.onload = function(e) {
           console.log(e.target.result);
-          ipfs.files.add([{path: './file.txt', content: e.target.result}], function(err, res){
+          ipfs.files.add([{path: '~/Desktop/a.txt', content: new Buffer(e.target.result)}], function(err, res){
               console.log(err, res);
           });
         };
